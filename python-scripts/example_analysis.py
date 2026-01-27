@@ -14,7 +14,7 @@ wind = 'data_sets/NOLA_wind.csv'
 solar = 'data_sets/NOLA_solar.csv'
 heat = 'data_sets/NOLA_heat.csv'
 port_location = 'New Orleans'
-port_file = 'data_sets/Port_demand_raw.csv'
+port_file = 'data_sets/port_demand_raw.csv'
 
 data = idf.DataFormatter()
 data.gather_port_demand(port_file,port_location)
@@ -34,8 +34,8 @@ data.wind = data.wind * optimizer.opt_wind_
 system = heo.HybridEnergyOptimizer()
 system.time_series = data.produce_avg_data_frame()
 
-results = system.simulate_bess_operation(10)
-system.optimize_bess_capacity(initial_guess = 100.0)
+results = system.simulate_bess_operation(10,3)
+system.optimize_bess_capacity()
 print(system.results['optimal_capacity'])
 
 pMetrics = system.calculate_performance_indicators()

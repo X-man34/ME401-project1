@@ -22,23 +22,13 @@ Author: Maxwell Hewes, Summer 2025
 
 """
 
-
-
 import numpy as np
-
 import pandas as pd
-
 import matplotlib.pyplot as plt
-
 from scipy.optimize import minimize
-
 import warnings
-
 warnings.filterwarnings('ignore')
-
 from matplotlib.dates import DateFormatter, DayLocator
-
-
 
 class HybridEnergyOptimizer:
 
@@ -821,11 +811,7 @@ class HybridEnergyOptimizer:
         """
 
         Optimize BESS capacity and optionally Rankine power.
-
-        
-
         Args:
-
             initial_guess: Starting BESS capacity (MWh)
 
             max_capacity: Maximum BESS capacity (MWh)
@@ -834,9 +820,7 @@ class HybridEnergyOptimizer:
 
             rankine_initial: Initial Rankine power guess (MW, uses current if None)
 
-            max_rankine: Maximum Rankine power (MW)
-
-            
+            max_rankine: Maximum Rankine power (MW)            
 
         Returns:
 
