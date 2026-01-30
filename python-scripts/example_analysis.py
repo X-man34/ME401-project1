@@ -10,11 +10,21 @@ import bess_optimizer as heo # hybrid energy optimizer
 import data_formatter as idf # input data formatter
 import supply_optimizer as opt # wind / solar capacity optimizer
 
-wind = 'data_sets/NOLA_wind.csv'
-solar = 'data_sets/NOLA_solar.csv'
-heat = 'data_sets/NOLA_heat.csv'
-port_location = 'New Orleans'
-port_file = 'data_sets/port_demand_raw.csv'
+# Original Datasets
+# wind = 'python-scripts/data_sets/NOLA_wind.csv'
+# solar = 'python-scripts/data_sets/NOLA_solar.csv'
+# heat = 'python-scripts/data_sets/NOLA_heat.csv'
+# port_location = 'New Orleans'
+
+# Seattle datasets
+wind = 'python-scripts/data_sets/Seattle/wind.csv'
+solar = 'python-scripts/data_sets/Seattle/solar.csv'
+heat = 'python-scripts/data_sets/Seattle/heat.csv'
+port_location = 'Seattle'
+
+# Data sourced from https://www.renewables.ninja
+port_file = 'python-scripts/data_sets/port_demand_raw.csv'
+
 
 data = idf.DataFormatter()
 data.gather_port_demand(port_file,port_location)
