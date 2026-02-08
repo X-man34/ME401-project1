@@ -1,0 +1,392 @@
+\documentclass[12pt,letterpaper]{article}
+
+% NOTE: .cls files are custom LaTeX class files that define document structure and formatting
+% This template uses standard 'article' class with manual ASME-inspired formatting instead
+
+%============================================================================
+% PACKAGES
+%============================================================================
+\usepackage[margin=1in]{geometry}           % Page margins
+\usepackage{times}                          % Times New Roman font (ASME standard)
+\usepackage{graphicx}                       % Include figures
+\usepackage{amsmath,amssymb}               % Math symbols and environments
+\usepackage{booktabs}                       % Professional tables
+\usepackage{hyperref}                       % Clickable links and references
+\usepackage{enumitem}                       % Customized lists
+\usepackage{fancyhdr}                       % Headers and footers
+\usepackage{caption}                        % Figure/table caption formatting
+\usepackage{listings}                       % Code snippets
+\usepackage{xcolor}                         % Colors for code highlighting
+\usepackage{float}                          % Better figure placement
+
+%============================================================================
+% FORMATTING SETTINGS
+%============================================================================
+
+% Section title formatting (ASME style: bold, numbered, left-aligned)
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\bfseries\uppercase}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\bfseries}{\thesubsection}{0.5em}{}
+
+% Line spacing
+\usepackage{setspace}
+\onehalfspacing
+
+% Code listing style (Python)
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    captionpos=b
+}
+
+% Hyperlink colors (subtle for professional appearance)
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+%============================================================================
+% DOCUMENT INFORMATION - STUDENTS FILL THESE IN
+%============================================================================
+\title{
+    \vspace{-1.5cm}
+    \textbf{Power System Optimization for Port Electrification:\\
+    [Specific Port Name]}
+}
+\author{
+    Student Name\\
+    \textit{Boise State University}\\
+    \textit{Department of Mechanical and Biomedical Engineering}\\
+    \texttt{studentemail@boisestate.edu}
+}
+\date{\today}
+
+%============================================================================
+% HEADER/FOOTER
+%============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Power Generation Optimization Report}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+%============================================================================
+\begin{document}
+%============================================================================
+
+%----------------------------------------------------------------------------
+% TITLE PAGE
+%----------------------------------------------------------------------------
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\LARGE \textbf{Power System Optimization for\\
+    Port Electrification System}\\[0.5cm]}
+    
+    {\Large [Specific Port Name]\\[1cm]}
+    
+    {\large Technical Report\\
+    ME 401: Engineering Systems and Applications\\[1.5cm]}
+    
+    {\large Submitted by:\\
+    \textbf{[Name]}\\
+    \texttt{[email@u.boisestate.edu]}\\[2cm]}
+    
+    {\large Boise State University\\
+    Department of Mechanical and Biomedical Engineering\\[1cm]}
+    
+    {\large \today\\[1.5cm]}
+    
+    \vfill
+    
+    {\small \textit{This report presents the thermodynamic analysis and optimization of a\\
+    power generation system as part of a broader port\\
+    electrification project addressing decarbonization challenges.}}
+    
+\end{titlepage}
+
+\thispagestyle{empty}
+\newpage
+
+%----------------------------------------------------------------------------
+% EXECUTIVE SUMMARY
+%----------------------------------------------------------------------------
+\section*{Executive Summary}
+\addcontentsline{toc}{section}{Executive Summary}
+
+% GUIDANCE: This section should be 1 paragraph (150-250 words) that captures:
+% - The engineering challenge you addressed
+% - Your approach (computational optimization of Rankine cycle, etc)
+% - Key findings (optimized parameters, efficiency achieved, working fluid selected)
+% - Primary recommendation for port electrification system
+%
+% Write for a technical manager who needs the essential results without details.
+% Example opening: "This report presents the optimization of a Rankine cycle
+% thermal power system for the electrification of [Port Name], addressing
+% the critical need for dispatchable renewable energy in port operations..."
+
+[Your executive summary here.\\ "Concise but complete" is the goal.]
+
+\newpage
+
+%----------------------------------------------------------------------------
+\section{Introduction}
+%----------------------------------------------------------------------------
+
+\subsection{Project Context and Motivation}
+
+% CRITICAL REFLECTION PROMPT (in comments):
+% How does your thermal power system fit within the broader port electrification challenge?
+% Consider: Why can't the port rely solely on solar/wind? What role does dispatchable
+% thermal generation play in the energy system? How does this project connect to real-world
+% decarbonization efforts?
+
+[Describe the engineering challenge: port electrification requirements, energy demand characteristics, role of thermal power generation in renewable energy systems, and connection to sustainability goals.]
+
+\subsection{Technical Objectives}
+
+% List your specific engineering goals. Example structure:
+\begin{itemize}[itemsep=0.3em]
+    \item Optimize Rankine cycle thermal efficiency for port-specific operating conditions
+    \item **What did we set out to do, try to come up with a handful of items **
+    
+\end{itemize}
+
+%----------------------------------------------------------------------------
+\section{Methodology}
+%----------------------------------------------------------------------------
+
+\subsection{Computational Architecture}
+
+% CRITICAL REFLECTION PROMPT:
+% How is the code structured to solve this problem? Don't just describe what
+% each function does—explain WHY you think it is organized in this way. How does modular design
+% help with debugging, verification, and future extensions? What would happen if you
+% put everything in one giant script?
+%
+% This is where you demonstrate understanding of ENGINEERING PROBLEM DECOMPOSITION,
+% not just coding syntax. These concepts are applicable to any type of engineering, not just coding!
+
+[Describe the computational approach: how the project is decomposed into functions, the workflow from inputs to outputs, and how different modules interact. Include a brief explanation of your verification strategy.]
+
+% EXAMPLE: Including a simple equation
+The thermal efficiency of the Rankine cycle is defined as:
+\begin{equation}
+    \eta_{th} = \frac{W_{net}}{Q_{in}} = \frac{W_{turbine} - W_{pump}}{Q_{boiler}}
+    \label{eq:thermal_efficiency}
+\end{equation}
+where $W_{net}$ is the net work output and $Q_{in}$ is the heat input to the cycle.
+
+\subsection{Thermodynamic Analysis Framework}
+
+% Describe the cycle components and state points. Example structure:
+The Rankine cycle consists of four main processes:
+\begin{enumerate}[itemsep=0.3em]
+    \item \textbf{1-2 (Pump):} Isentropic compression of liquid
+    \item \textbf{2-3 (Boiler):} Constant pressure heat addition
+    \item \textbf{3-4 (Turbine):} Isentropic expansion through turbine
+    \item \textbf{4-1 (Condenser):} Constant pressure heat rejection
+\end{enumerate}
+
+% EXAMPLE: Multi-line equation with alignment
+The first law of thermodynamics for each component yields:
+%% COMPLETE THIS SECTION ===================================
+\begin{align}
+    \text{Pump work:} \quad W_{pump} &= \dot m (h_2 - h_1) \label{eq:pump_work}\\
+    \text{Heat input:} \\
+    \text{Turbine work:} \\
+    \text{Heat rejection:}  \label{eq:heat_out}
+\end{align}
+
+\subsection{Optimization Approach}
+
+% CRITICAL REFLECTION PROMPT:
+% why do we use computational method for optimization? what do you understand about how this optimization works? Does not need to be a deep and complete explanation. Just spend some time thinking about why this is a critical part of engineering and share your insights
+
+[Describe the role of optimization in engineering and how it can help guide design processes and decisions.]
+
+% EXAMPLE: Including a figure (replace with your own T-s or h-s diagram)
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.7\textwidth]{figures/ts_diagram.png}
+    \fbox{\parbox{0.65\textwidth}{\centering\vspace{1.5cm}
+    [Insert your T-s diagram here]\\
+    \textit{Generate using matplotlib and save as .png or.jpg}\\
+    \textit{Uncomment the includegraphics line above}
+    \vspace{1.5cm}}}
+    \caption{Temperature-entropy diagram for optimized Rankine cycle operating with [working fluid]. State points labeled 1-4 correspond to pump inlet, boiler inlet, turbine inlet, and condenser inlet respectively.}
+    \label{fig:ts_diagram}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\section{Results and Discussion}
+%----------------------------------------------------------------------------
+
+\subsection{Optimized Cycle Parameters}
+
+% EXAMPLE: Professional table formatting
+\begin{table}[H]
+\centering
+\caption{Optimized Rankine cycle operating conditions and performance metrics}
+\label{tab:results}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Units} \\
+\midrule
+Working Fluid & [e.g., Water] & -- \\
+Boiler Pressure & [value] & bar \\
+Boiler Temperature & [value] & °C \\
+Condenser Pressure & [value] & bar \\
+Mass Flow Rate & [value] & kg/s \\
+\midrule
+Thermal Efficiency & [value] & \% \\
+Net Power Output & [value] & kW \\
+Heat Input Required & [value] & kW \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Verification and Validation}
+
+% CRITICAL REFLECTION PROMPT:
+% How did you know your code was RIGHT? Don't just say "it ran without errors."
+% Did you check energy balance? Entropy generation? Compare to hand calculations?
+% Did any results surprise you? Did you find bugs through thermodynamic reasoning?
+%
+% This demonstrates ANALYTICAL VERIFICATION—the heart of engineering judgment.
+
+[Present evidence that your computational results are physically valid. Include energy balance checks, comparison to theoretical limits (Carnot efficiency), and any hand calculations you used for verification.]
+
+The energy balance for the overall cycle is verified:
+\begin{equation}
+    Q_{in} - Q_{out} = W_{net} \quad \Rightarrow \quad [\text{your values show this holds within X\%}]
+\end{equation}
+
+\subsection{Sensitivity Analysis and Trade-offs}
+
+% CRITICAL REFLECTION PROMPT (SYSTEMS THINKING):
+% What happens when you change key parameters? Higher boiler pressure increases
+% efficiency BUT requires more expensive equipment and materials. Lower condenser
+% temperature helps efficiency BUT requires more cooling water or larger heat exchangers.
+% These are ENGINEERING TRADE-OFFS, not just math problems.
+%
+% Can you think beyond the immediate optimization to practical constraints?
+
+[Discuss how cycle performance varies with key parameters. Identify some trade-offs? How might practical considerations (cost, materials, environmental impact) affect your recommendations?]
+
+% EXAMPLE: You might include a second figure showing efficiency vs. pressure
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.65\textwidth}{\centering\vspace{1.5cm}
+    [Insert sensitivity analysis plot]\\
+    \textit{e.g., efficiency vs. boiler pressure}
+    \vspace{1.5cm}}}
+    \caption{Thermal efficiency as a function of boiler operating pressure, demonstrating diminishing returns beyond [X] bar and practical constraint considerations.}
+    \label{fig:sensitivity}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\section{Integration with Port Energy System}
+%----------------------------------------------------------------------------
+
+% CRITICAL REFLECTION PROMPT (SYSTEMS THINKING):
+% Your Rankine cycle doesn't exist in isolation. It's one component of a larger
+% energy system for the port. How does it complement solar/wind generation?
+% When does it need to operate? How does it handle variable demand?
+%
+% This is where you connect COMPONENT ANALYSIS to SYSTEM DESIGN. Can you think
+% at multiple scales simultaneously?
+
+[Discuss how your optimized thermal power system integrates with the port's overall energy infrastructure. Reference the Python data analysis work. When does thermal generation supplement renewables? What role does it play (is it meeting peak demand or providing baseload power)?]
+
+Potential discussion points:
+\begin{itemize}
+    \item Hourly dispatch strategy based on renewable availability
+    \item Capacity factor and annual energy production estimates
+    \item Fuel requirements and associated emissions/costs
+    \item Comparison to alternative dispatchable sources (batteries, grid connection)
+\end{itemize}
+
+%----------------------------------------------------------------------------
+\section{AI-Assisted Engineering: Process and Reflection}
+%----------------------------------------------------------------------------
+
+% CRITICAL REFLECTION PROMPT (AI LITERACY):
+% This section is NOT about listing what prompts you used. It's about reflecting on
+% HOW YOU LEARNED through AI interaction. Did you use AI to understand concepts or
+% just generate code? Did you verify AI outputs or trust them blindly?
+%
+% Key questions to address:
+% - How did your prompting strategy evolve as you understood the problem better?
+% - What errors did AI introduce, and how did you catch them?
+% - When was AI most helpful? When was it misleading?
+% - How is using AI different from copying code from Stack Overflow?
+% - Will you use AI differently on future engineering projects? How?
+
+\subsection{Computational Development Strategy}
+
+[Describe your approach to using AI tools in developing the validation code. How did you balance AI assistance with your own understanding? Provide specific examples of effective prompting strategies or situations where verification caught AI errors.]
+
+% OPTIONAL: Include a brief code snippet example if it illustrates a key learning point
+% \begin{lstlisting}[caption={Example function structure for cycle state calculation}, label={lst:example}]
+% def calculate_cycle_states(P_boiler, T_boiler, P_condenser, fluid):
+%     """
+%     Calculate thermodynamic states at each point in Rankine cycle.
+%     
+%     Students: Your docstring should explain WHAT the function does,
+%     WHAT inputs it expects, and WHAT it returns. This is professional practice.
+%     """
+%     # State 1: Saturated liquid at condenser pressure
+%     # State 2: Compressed liquid after pump
+%     # State 3: Superheated vapor at boiler exit
+%     # State 4: Wet vapor after turbine expansion
+%     
+%     return states  # Dictionary containing h, s, T, P for each state
+% \end{lstlisting}
+
+\subsection{Lessons Learned in AI-Augmented Engineering}
+
+[Reflect critically on the role of AI in your engineering process. What worked well? What didn't? How did this experience shape your understanding of AI as an engineering tool versus a solution machine? What practices will you carry forward?]
+
+Key reflection areas (address those most relevant to your experience):
+\begin{itemize}
+    \item Iterative refinement vs. one-shot code generation
+    \item Verification as essential practice with AI-generated code
+    \item Understanding AI's limitations in domain-specific knowledge
+    \item Building mental models while leveraging AI capabilities
+    \item Ethical considerations in AI-assisted academic work
+\end{itemize}
+
+%----------------------------------------------------------------------------
+\section{Conclusions and Recommendations}
+%----------------------------------------------------------------------------
+
+\subsection{Key Findings}
+
+[Summarize your main technical results in 3-5 bullet points. Be specific and quantitative.]
+
+\subsection{Engineering Recommendations}
+
+% CRITICAL REFLECTION PROMPT:
+% Based on your analysis, what would you actually recommend for the port?
+% Not just "use water at 50 bar" but WHY that makes sense for THIS application.
+% What are the implementation challenges? What uncertainties remain?
+% This is ENGINEERING JUDGMENT.
+
+[Provide actionable recommendations for the port electrification system based on your analysis. Include caveats about assumptions, limitations, and areas requiring further investigation.]
+
+\subsection{Future Work}
+
+[What would you do next if this were a real consulting project? More detailed economic analysis? Consider alternative cycle configurations? Validate with pilot-scale testing? This shows you understand engineering as an iterative process.]
+
+\end{document}

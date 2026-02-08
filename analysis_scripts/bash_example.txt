@@ -1,0 +1,11 @@
+# Quick single cycle check
+python run_rankine_analysis.py --mode single --p-boiler 8e6 --t-boiler 773.15 --p-condenser 10e3
+
+# Find optimal parameters
+python run_rankine_analysis.py --mode optimize
+
+# See how boiler pressure affects efficiency
+python run_rankine_analysis.py --mode parametric --sweep p-boiler --p-boiler-range 5e6 20e6 --t-boiler 773.15 --p-condenser 10e3
+
+# Compare three different designs
+python run_rankine_analysis.py --mode compare --configs "8e6,773.15,10e3" "15e6,823.15,5e3" "12e6,800,8e3"
