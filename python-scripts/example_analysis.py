@@ -6,6 +6,7 @@ with provided input data and generate performance metrics.
 Created for ME 401 @ Boise State Univerity
 Author: Maxwell Hewes, Summer 2025
 """
+# import bess_optimizer as heo # hybrid energy optimizer
 import bess_optimizer as heo # hybrid energy optimizer
 import data_formatter as idf # input data formatter
 import supply_optimizer as opt # wind / solar capacity optimizer
