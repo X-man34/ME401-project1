@@ -15,7 +15,7 @@ Date: February 2026
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize, differential_evolution
+from scipy.optimize import NonlinearConstraint, differential_evolution, minimize
 from mpl_toolkits.mplot3d import Axes3D
 import warnings
 warnings.filterwarnings('ignore')  # Suppress CoolProp warnings during optimization
@@ -23,6 +23,11 @@ warnings.filterwarnings('ignore')  # Suppress CoolProp warnings during optimizat
 # Import your existing RankineCycle class
 # Make sure the rankine_cycle.py file is in the same directory!
 from rankine_cycle import RankineCycle
+from rankine_validation import (
+    build_validation_report,
+    print_validation_report,
+    validate_rankine_solution,
+)
 
 
 # =============================================================================
@@ -137,7 +142,13 @@ def constraint_quality_turbine_exit(x):
     minimum_quality = 0.88  # Typical industry standard
     
     try:
-        cycle = RankineCycle(P_boiler, T_boiler, P_condenser)
+        cycle = RankineCycle(
+            P_boiler,
+            T_boiler,
+            P_condenser,
+            eta_pump=1.0,
+            eta_turbine=1.0,
+        )
         
         # Calculate quality at state 4 (turbine exit)
         from CoolProp.CoolProp import PropsSI
@@ -181,9 +192,9 @@ def optimize_rankine_cycle():
     # What if you allow lower condenser pressures (better vacuum)?
     
     bounds = [
-        (1e6, 20e6),      # P_boiler: 1-20 MPa
-        (400+273.15, 600+273.15),  # T_boiler: 400-600°C converted to K
-        (5e3, 50e3)       # P_condenser: 5-50 kPa
+        (2e6, 12e6),      # P_boiler: 1-6 MPa
+        (200+273.15, 830+273.15),  # T_boiler: 
+        (1e3, 20e3)       # P_condenser: 5-50 kPa
     ]
     
     print("\nOptimization Bounds:")
@@ -201,6 +212,10 @@ def optimize_rankine_cycle():
         {'type': 'ineq', 'fun': constraint_superheat},
         {'type': 'ineq', 'fun': constraint_quality_turbine_exit}
     ]
+    de_constraints = (
+        NonlinearConstraint(constraint_superheat, 0.0, np.inf),
+        NonlinearConstraint(constraint_quality_turbine_exit, 0.0, np.inf),
+    )
     
     # -------------------------------------------------------------------------
     # Initial guess
@@ -209,8 +224,8 @@ def optimize_rankine_cycle():
     # Start somewhere in the middle of the feasible region.
     
     x0 = np.array([
-        10e6,      # P_boiler = 10 MPa (middle of range)
-        500+273.15,  # T_boiler = 500°C (middle of range)
+        6e6,      # P_boiler = 10 MPa (middle of range)
+        400+273.15,  # T_boiler = 500°C (middle of range)
         10e3       # P_condenser = 10 kPa (middle of range)
     ])
     
@@ -264,8 +279,7 @@ def optimize_rankine_cycle():
     result_de = differential_evolution(
         objective_function,
         bounds,
-        constraints=constraints,
-        seed=42,  # For reproducibility
+        constraints=de_constraints,
         disp=True,
         maxiter=50,  # Adjust based on time available
         workers=1    # Use 1 worker to avoid CoolProp threading issues
@@ -276,6 +290,35 @@ def optimize_rankine_cycle():
         print_optimization_results(result_de, "Differential Evolution")
     else:
         print("\nOptimization failed:", result_de.message)
+
+    # -------------------------------------------------------------------------
+    # Validation for each optimizer result
+    # -------------------------------------------------------------------------
+    validation_records = []
+
+    slsqp_x = result_slsqp.x if hasattr(result_slsqp, 'x') else x0
+    slsqp_fun = result_slsqp.fun if hasattr(result_slsqp, 'fun') else objective_function(x0)
+    validation_records.append(
+        validate_rankine_solution(
+            method_name="SLSQP",
+            x_opt=np.array(slsqp_x, dtype=float),
+            objective_value=float(slsqp_fun),
+            success=bool(result_slsqp.success),
+            message=str(result_slsqp.message),
+        )
+    )
+
+    de_x = result_de.x if hasattr(result_de, 'x') else x0
+    de_fun = result_de.fun if hasattr(result_de, 'fun') else objective_function(x0)
+    validation_records.append(
+        validate_rankine_solution(
+            method_name="Differential Evolution",
+            x_opt=np.array(de_x, dtype=float),
+            objective_value=float(de_fun),
+            success=bool(result_de.success),
+            message=str(result_de.message),
+        )
+    )
     
     # -------------------------------------------------------------------------
     # Compare methods
@@ -290,6 +333,10 @@ def optimize_rankine_cycle():
     if result_de.success:
         print(f"{'Differential Evolution':<25} {-result_de.fun*100:<15.3f} {result_de.nfev:<20}")
     print("="*80)
+
+    print_validation_report(validation_records)
+    report = build_validation_report(validation_records, output_path='rankine_validation_report.json')
+    print(f"\nValidation report saved: {report['output_path']}")
     
     return result_slsqp, result_de
 
@@ -546,30 +593,3 @@ if __name__ == "__main__":
 # =============================================================================
 # ADVANCED EXERCISES FOR FURTHER LEARNING
 # =============================================================================
-"""
-Once you're comfortable with this script, try these challenges:
-
-1. MULTI-OBJECTIVE OPTIMIZATION:
-   - Maximize efficiency AND minimize cost
-   - Use scipy.optimize with weighted objective or Pareto front
-
-2. UNCERTAINTY QUANTIFICATION:
-   - Add uncertainty to operating conditions (±5% pressure, ±10 K temp)
-   - Use Monte Carlo to evaluate robust optimum
-
-3. COMPONENT SIZING:
-   - Add heat exchanger area as design variable
-   - Constrain based on heat transfer correlations
-
-4. DYNAMIC OPTIMIZATION:
-   - Optimize startup/shutdown trajectories
-   - Use time-varying constraints
-
-5. ALTERNATIVE WORKING FLUIDS:
-   - Compare optimized water, R134a, and CO2 cycles
-   - Which fluid gives best performance for given T_source?
-
-6. EXERGY OPTIMIZATION:
-   - Minimize total exergy destruction instead of maximizing efficiency
-   - Identify bottleneck components
-"""
