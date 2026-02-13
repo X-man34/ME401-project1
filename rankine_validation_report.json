@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-02-13T20:38:15.482430+00:00",
+  "created_utc": "2026-02-13T21:10:11.986993+00:00",
   "record_count": 2,
   "all_valid": true,
   "methods": [
@@ -8,21 +8,21 @@
       "optimizer_success": true,
       "optimizer_message": "Optimization terminated successfully",
       "x_opt": {
-        "P_boiler_Pa": 5999999.980759874,
-        "T_boiler_K": 1103.15,
-        "P_condenser_Pa": 10003.431358278558,
-        "P_boiler_MPa": 5.999999980759874,
-        "T_boiler_C": 830.0000000000001,
-        "P_condenser_kPa": 10.003431358278558
+        "P_boiler_Pa": 8247941.199683601,
+        "T_boiler_K": 893.1499999422433,
+        "P_condenser_Pa": 20000.0,
+        "P_boiler_MPa": 8.2479411996836,
+        "T_boiler_C": 619.9999999422433,
+        "P_condenser_kPa": 20.0
       },
-      "objective_efficiency": 0.436877236259572,
+      "objective_efficiency": 0.394678514507695,
       "checks": {
         "finite_inputs": {
           "pass": true,
           "value": {
-            "P_boiler_Pa": 5999999.980759874,
-            "T_boiler_K": 1103.15,
-            "P_condenser_Pa": 10003.431358278558
+            "P_boiler_Pa": 8247941.199683601,
+            "T_boiler_K": 893.1499999422433,
+            "P_condenser_Pa": 20000.0
           },
           "threshold": "all finite",
           "detail": "Decision variables must be finite scalars."
@@ -30,9 +30,9 @@
         "positive_inputs": {
           "pass": true,
           "value": {
-            "P_boiler_Pa": 5999999.980759874,
-            "T_boiler_K": 1103.15,
-            "P_condenser_Pa": 10003.431358278558
+            "P_boiler_Pa": 8247941.199683601,
+            "T_boiler_K": 893.1499999422433,
+            "P_condenser_Pa": 20000.0
           },
           "threshold": "> 0",
           "detail": "Pressure and temperature must be positive."
@@ -40,130 +40,8 @@
         "pressure_hierarchy": {
           "pass": true,
           "value": {
-            "P_boiler_Pa": 5999999.980759874,
-            "P_condenser_Pa": 10003.431358278558
-          },
-          "threshold": "P_boiler > P_condenser",
-          "detail": "Rankine high pressure should exceed condenser pressure."
-        },
-        "energy_balance": {
-          "pass": true,
-          "value": 2.3283064365386963e-10,
-          "threshold": 4.007722695618829,
-          "detail": "q_in - q_out - w_net should be approximately zero."
-        },
-        "efficiency_consistency": {
-          "pass": true,
-          "value": {
-            "eta_from_components": 0.436877236259572,
-            "eta_from_objective": 0.436877236259572
-          },
-          "threshold": 1e-06,
-          "detail": "Efficiency from states should match optimizer objective."
-        },
-        "q_in_positive": {
-          "pass": true,
-          "value": 4007722.6956188297,
-          "threshold": "> 0",
-          "detail": "Boiler heat input must be positive."
-        },
-        "q_out_positive": {
-          "pass": true,
-          "value": 2256839.8806621134,
-          "threshold": "> 0",
-          "detail": "Condenser heat rejection must be positive."
-        },
-        "w_turbine_positive": {
-          "pass": true,
-          "value": 1756926.6553219394,
-          "threshold": "> 0",
-          "detail": "Turbine work must be positive."
-        },
-        "w_pump_nonnegative": {
-          "pass": true,
-          "value": 6043.840365223383,
-          "threshold": ">= 0",
-          "detail": "Pump work should not be negative."
-        },
-        "w_net_positive": {
-          "pass": true,
-          "value": 1750882.814956716,
-          "threshold": "> 0",
-          "detail": "Net cycle work should be positive."
-        },
-        "efficiency_bounds": {
-          "pass": true,
-          "value": 0.436877236259572,
-          "threshold": "0 < eta < 1",
-          "detail": "Thermal efficiency should be between 0 and 1 for this cycle model."
-        },
-        "superheat_margin": {
-          "pass": true,
-          "value": 504.4150102168288,
-          "threshold": ">= -1e-08",
-          "detail": "Superheat margin after minimum required superheat."
-        },
-        "turbine_exit_quality_margin": {
-          "pass": true,
-          "value": {
-            "margin": 0.063480500901683,
-            "quality": 0.943480500901683
-          },
-          "threshold": ">= -1e-08",
-          "detail": "Quality margin relative to minimum acceptable turbine exit quality."
-        }
-      },
-      "warnings": [],
-      "overall_validation_pass": true,
-      "tolerances": {
-        "energy_balance_abs_tol": 0.001,
-        "energy_balance_rel_tol": 1e-06,
-        "efficiency_tol": 1e-06,
-        "constraint_tol": 1e-08,
-        "minimum_superheat": 50.0,
-        "minimum_quality": 0.88
-      },
-      "timestamp_utc": "2026-02-13T20:38:15.468983+00:00"
-    },
-    {
-      "method": "Differential Evolution",
-      "optimizer_success": true,
-      "optimizer_message": "Optimization terminated successfully.",
-      "x_opt": {
-        "P_boiler_Pa": 5343902.11538088,
-        "T_boiler_K": 1103.1461387377376,
-        "P_condenser_Pa": 1556.5832402669537,
-        "P_boiler_MPa": 5.343902115380881,
-        "T_boiler_C": 829.9961387377376,
-        "P_condenser_kPa": 1.5565832402669537
-      },
-      "objective_efficiency": 0.47601251364177394,
-      "checks": {
-        "finite_inputs": {
-          "pass": true,
-          "value": {
-            "P_boiler_Pa": 5343902.11538088,
-            "T_boiler_K": 1103.1461387377376,
-            "P_condenser_Pa": 1556.5832402669537
-          },
-          "threshold": "all finite",
-          "detail": "Decision variables must be finite scalars."
-        },
-        "positive_inputs": {
-          "pass": true,
-          "value": {
-            "P_boiler_Pa": 5343902.11538088,
-            "T_boiler_K": 1103.1461387377376,
-            "P_condenser_Pa": 1556.5832402669537
-          },
-          "threshold": "> 0",
-          "detail": "Pressure and temperature must be positive."
-        },
-        "pressure_hierarchy": {
-          "pass": true,
-          "value": {
-            "P_boiler_Pa": 5343902.11538088,
-            "P_condenser_Pa": 1556.5832402669537
+            "P_boiler_Pa": 8247941.199683601,
+            "P_condenser_Pa": 20000.0
           },
           "threshold": "P_boiler > P_condenser",
           "detail": "Rankine high pressure should exceed condenser pressure."
@@ -171,65 +49,65 @@
         "energy_balance": {
           "pass": true,
           "value": 0.0,
-          "threshold": 4.146010635117602,
+          "threshold": 3.4286691745189404,
           "detail": "q_in - q_out - w_net should be approximately zero."
         },
         "efficiency_consistency": {
           "pass": true,
           "value": {
-            "eta_from_components": 0.47601251364177394,
-            "eta_from_objective": 0.47601251364177394
+            "eta_from_components": 0.394678514507695,
+            "eta_from_objective": 0.394678514507695
           },
           "threshold": 1e-06,
           "detail": "Efficiency from states should match optimizer objective."
         },
         "q_in_positive": {
           "pass": true,
-          "value": 4146010.6351176016,
+          "value": 3428669.1745189405,
           "threshold": "> 0",
           "detail": "Boiler heat input must be positive."
         },
         "q_out_positive": {
           "pass": true,
-          "value": 2172457.6911097444,
+          "value": 2075447.1179814802,
           "threshold": "> 0",
           "detail": "Condenser heat rejection must be positive."
         },
         "w_turbine_positive": {
           "pass": true,
-          "value": 1978892.6029983386,
+          "value": 1361576.749702942,
           "threshold": "> 0",
           "detail": "Turbine work must be positive."
         },
         "w_pump_nonnegative": {
           "pass": true,
-          "value": 5339.658990481388,
+          "value": 8354.693165481818,
           "threshold": ">= 0",
           "detail": "Pump work should not be negative."
         },
         "w_net_positive": {
           "pass": true,
-          "value": 1973552.9440078572,
+          "value": 1353222.0565374603,
           "threshold": "> 0",
           "detail": "Net cycle work should be positive."
         },
         "efficiency_bounds": {
           "pass": true,
-          "value": 0.47601251364177394,
+          "value": 0.394678514507695,
           "threshold": "0 < eta < 1",
           "detail": "Thermal efficiency should be between 0 and 1 for this cycle model."
         },
         "superheat_margin": {
           "pass": true,
-          "value": 511.8651056360784,
+          "value": 272.85362154846746,
           "threshold": ">= -1e-08",
           "detail": "Superheat margin after minimum required superheat."
         },
         "turbine_exit_quality_margin": {
           "pass": true,
           "value": {
-            "margin": 2.0317238398348536e-06,
-            "quality": 0.8800020317238398
+            "margin": 0.0003545402648865714,
+            "quality": 0.8803545402648866
           },
           "threshold": ">= -1e-08",
           "detail": "Quality margin relative to minimum acceptable turbine exit quality."
@@ -245,7 +123,129 @@
         "minimum_superheat": 50.0,
         "minimum_quality": 0.88
       },
-      "timestamp_utc": "2026-02-13T20:38:15.478624+00:00"
+      "timestamp_utc": "2026-02-13T21:10:11.976480+00:00"
+    },
+    {
+      "method": "Differential Evolution",
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "x_opt": {
+        "P_boiler_Pa": 6054123.135827588,
+        "T_boiler_K": 893.149354046388,
+        "P_condenser_Pa": 11178.07411262336,
+        "P_boiler_MPa": 6.054123135827588,
+        "T_boiler_C": 619.999354046388,
+        "P_condenser_kPa": 11.17807411262336
+      },
+      "objective_efficiency": 0.3995908431078804,
+      "checks": {
+        "finite_inputs": {
+          "pass": true,
+          "value": {
+            "P_boiler_Pa": 6054123.135827588,
+            "T_boiler_K": 893.149354046388,
+            "P_condenser_Pa": 11178.07411262336
+          },
+          "threshold": "all finite",
+          "detail": "Decision variables must be finite scalars."
+        },
+        "positive_inputs": {
+          "pass": true,
+          "value": {
+            "P_boiler_Pa": 6054123.135827588,
+            "T_boiler_K": 893.149354046388,
+            "P_condenser_Pa": 11178.07411262336
+          },
+          "threshold": "> 0",
+          "detail": "Pressure and temperature must be positive."
+        },
+        "pressure_hierarchy": {
+          "pass": true,
+          "value": {
+            "P_boiler_Pa": 6054123.135827588,
+            "P_condenser_Pa": 11178.07411262336
+          },
+          "threshold": "P_boiler > P_condenser",
+          "detail": "Rankine high pressure should exceed condenser pressure."
+        },
+        "energy_balance": {
+          "pass": true,
+          "value": -2.3283064365386963e-10,
+          "threshold": 3.498208290918267,
+          "detail": "q_in - q_out - w_net should be approximately zero."
+        },
+        "efficiency_consistency": {
+          "pass": true,
+          "value": {
+            "eta_from_components": 0.3995908431078804,
+            "eta_from_objective": 0.3995908431078804
+          },
+          "threshold": 1e-06,
+          "detail": "Efficiency from states should match optimizer objective."
+        },
+        "q_in_positive": {
+          "pass": true,
+          "value": 3498208.290918267,
+          "threshold": "> 0",
+          "detail": "Boiler heat input must be positive."
+        },
+        "q_out_positive": {
+          "pass": true,
+          "value": 2100356.2905832594,
+          "threshold": "> 0",
+          "detail": "Condenser heat rejection must be positive."
+        },
+        "w_turbine_positive": {
+          "pass": true,
+          "value": 1403955.039119502,
+          "threshold": "> 0",
+          "detail": "Turbine work must be positive."
+        },
+        "w_pump_nonnegative": {
+          "pass": true,
+          "value": 6103.038784494478,
+          "threshold": ">= 0",
+          "detail": "Pump work should not be negative."
+        },
+        "w_net_positive": {
+          "pass": true,
+          "value": 1397852.0003350077,
+          "threshold": "> 0",
+          "detail": "Net cycle work should be positive."
+        },
+        "efficiency_bounds": {
+          "pass": true,
+          "value": 0.3995908431078804,
+          "threshold": "0 < eta < 1",
+          "detail": "Thermal efficiency should be between 0 and 1 for this cycle model."
+        },
+        "superheat_margin": {
+          "pass": true,
+          "value": 293.82777542261783,
+          "threshold": ">= -1e-08",
+          "detail": "Superheat margin after minimum required superheat."
+        },
+        "turbine_exit_quality_margin": {
+          "pass": true,
+          "value": {
+            "margin": 3.145976806839812e-07,
+            "quality": 0.8800003145976807
+          },
+          "threshold": ">= -1e-08",
+          "detail": "Quality margin relative to minimum acceptable turbine exit quality."
+        }
+      },
+      "warnings": [],
+      "overall_validation_pass": true,
+      "tolerances": {
+        "energy_balance_abs_tol": 0.001,
+        "energy_balance_rel_tol": 1e-06,
+        "efficiency_tol": 1e-06,
+        "constraint_tol": 1e-08,
+        "minimum_superheat": 50.0,
+        "minimum_quality": 0.88
+      },
+      "timestamp_utc": "2026-02-13T21:10:11.986993+00:00"
     }
   ]
 }

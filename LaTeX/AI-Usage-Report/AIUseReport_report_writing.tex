@@ -1,0 +1,178 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{verbatim}
+
+\titleformat{\section}{\normalfont\bfseries\uppercase}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\bfseries}{\thesubsection}{0.5em}{}
+\onehalfspacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+\title{
+    \vspace{-1.5cm}
+    \textbf{AI Usage Documentation:\\
+    Seattle Port Nuclear Report Conversation}
+}
+\author{
+    [Name]\\
+    \textit{Boise State University}\\
+    \textit{Department of Mechanical and Biomedical Engineering}\\
+    \texttt{[email@u.boisestate.edu]}
+}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small ME 401 AI Usage Documentation}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\LARGE \textbf{AI Usage Documentation}\\[0.4cm]}
+    {\Large Conversation 2: Report Writing and Revision\\[1cm]}
+    {\large ME 401: Engineering Systems and Applications\\[1.0cm]}
+    {\large Submitted by:\\
+    \textbf{[Name]}\\
+    \texttt{[email@u.boisestate.edu]}\\[1.5cm]}
+    {\large Boise State University\\
+    Department of Mechanical and Biomedical Engineering\\[1cm]}
+    {\large \today}
+    \vfill
+    {\small This memo documents AI-assisted report drafting, data refresh, and client-tone revision activity.}
+\end{titlepage}
+
+\thispagestyle{empty}
+\newpage
+
+\section*{Executive Summary}
+\addcontentsline{toc}{section}{Executive Summary}
+
+This document records AI usage for the conversation where a consultant-style Seattle Port Authority report was produced in LaTeX, supported by refreshed optimization and dispatch results. The AI assistant extracted project instructions and draft context, proposed an implementation plan, updated optimization bounds for a nuclear-coupled cycle study, ran the analysis workflows, and drafted a complete technical report. Follow-up revisions were then applied to adjust audience tone (port authority level), remove low-relevance technical detail from executive messaging, add Fukushima-informed tsunami context, and remove citations to internal class/draft documents.
+
+\section{Primary Prompt}
+
+\subsection{User Prompt (Major Conversation 2)}
+
+\begin{verbatim}
+ok I do want you to write the report...
+...focus on building a nuclear reactor for Seattle demand...
+...consultant tone to Seattle Port Authority...
+...reactor in eastern Washington...
+...run rankine optimization and port analysis to get numbers...
+...use latexTemplate.tex stub...
+...modify optimization bounds as needed for reactor properties...
+\end{verbatim}
+
+\section{Desired Outcome}
+
+\subsection{Requested Deliverables}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Final technical report in LaTeX (not PDF) with professional consultant framing.
+    \item Updated model outputs and figures pulled from current code runs.
+    \item Explicit siting rationale for Eastern Washington location.
+    \item Rubric-aware writing and references.
+\end{itemize}
+
+\section{Message History and Status Updates}
+
+\subsection{Conversation Trace (Excluding This Documentation Thread)}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Assistant status update: scoped files and scripts for report evidence capture.
+    \item Assistant status update: extracted assignment instructions and napkin draft text.
+    \item Assistant status update: identified mismatch between requested realism and current broad optimization bounds.
+    \item Assistant status update: performed feasibility sweeps for defensible nuclear-cycle bound choices.
+    \item Assistant provided full proposed plan block for report production and verification.
+    \item User supplied final coordinate and siting rationale details.
+    \item Assistant status update: implemented selected bound/reproducibility updates in optimization script.
+    \item Assistant status update: ran optimization reproducibility checks and refreshed figures/validation JSON.
+    \item Assistant status update: ran Seattle portfolio analysis to refresh dispatch metrics and plots.
+    \item Assistant status update: drafted full \texttt{seattle\_port\_nuclear\_report.tex}.
+    \item Assistant status update: applied client-tone revisions requested by user:
+    removed explicit script naming, reduced executive-summary specificity, added Fukushima tsunami context, removed internal-document citations.
+\end{itemize}
+
+\subsection{Plan History (From Proposed Plan)}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Planned advanced nuclear-style optimization bounds and deterministic DE settings.
+    \item Planned full report generation with sections, equations, tables, and figures.
+    \item Planned use of refreshed outputs only (not stale values).
+    \item Planned references from external technical sources only.
+    \item Planned verification set: reproducibility, constraints/validation pass, CLI consistency, and report compilation check.
+\end{itemize}
+
+\section{Results and Discussion}
+
+\subsection{Artifacts Produced During Conversation 2}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Updated optimization settings in \texttt{analysis\_scripts/rankine\_optimization.py}:
+    advanced cycle bounds and fixed DE RNG for reproducibility.
+    \item Refreshed computational outputs:
+    \texttt{optimization\_contour\_boiler.png},
+    \texttt{optimization\_contour\_pressure.png},
+    \texttt{optimization\_sensitivity.png},
+    \texttt{rankine\_validation\_report.json}.
+    \item Full report draft:
+    \texttt{LaTeX/seattle\_port\_nuclear\_report.tex}.
+\end{itemize}
+
+\subsection{Requested Revisions Applied}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Removed explicit Python filename mentions from audience-facing text.
+    \item Removed optimization-bounds detail from executive summary.
+    \item Added Fukushima-based tsunami-risk context for coastal siting discussion.
+    \item Removed phrase ``project scoping notes''.
+    \item Removed citations to internal class instructions and napkin draft.
+\end{itemize}
+
+\section{AI-Assisted Engineering Reflection}
+
+\subsection{What AI Did Well}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Connected model execution outputs directly into technical writing.
+    \item Kept report claims tied to rerun numerical evidence.
+    \item Supported rapid revision cycles for audience-specific tone.
+\end{itemize}
+
+\subsection{What Required Human Direction}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Site-specific rationale details and final coordinate lock.
+    \item Audience preference on technical depth in executive summary.
+    \item Citation policy for excluding internal course/draft references.
+\end{itemize}
+
+\section{Conclusion}
+
+The second major AI conversation delivered a complete LaTeX consultant report with refreshed computational evidence and targeted editorial revisions, while maintaining transparency about assumptions and preserving reproducible analysis behavior.
+
+\end{document}
+

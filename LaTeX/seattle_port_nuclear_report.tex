@@ -1,0 +1,351 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{array}
+\usepackage{setspace}
+\usepackage{titlesec}
+
+\titleformat{\section}{\normalfont\bfseries\uppercase}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\bfseries}{\thesubsection}{0.5em}{}
+\onehalfspacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+\title{
+    \vspace{-1.5cm}
+    \textbf{Power System Optimization for Port Electrification:\\
+    Port of Seattle}
+}
+\author{
+    [Name]\\
+    \textit{Boise State University}\\
+    \textit{Department of Mechanical and Biomedical Engineering}\\
+    \texttt{[email@u.boisestate.edu]}
+}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Power Generation Optimization Report}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\LARGE \textbf{Power System Optimization for\\
+    Port Electrification System}\\[0.5cm]}
+
+    {\Large Port of Seattle\\[1cm]}
+
+    {\large Technical Report\\
+    ME 401: Engineering Systems and Applications\\[1.5cm]}
+
+    {\large Submitted by:\\
+    \textbf{[Name]}\\
+    \texttt{[email@u.boisestate.edu]}\\[2cm]}
+
+    {\large Boise State University\\
+    Department of Mechanical and Biomedical Engineering\\[1cm]}
+
+    {\large \today\\[1.5cm]}
+
+    \vfill
+
+    {\small \textit{Prepared in consultant format for the Seattle Port Authority to support
+    dispatchable generation planning under port electrification objectives.}}
+\end{titlepage}
+
+\thispagestyle{empty}
+\newpage
+
+\section*{Executive Summary}
+\addcontentsline{toc}{section}{Executive Summary}
+
+This report evaluates a dispatchable thermal generation concept to support the Port of Seattle electrification program. Seattle weather and demand data were analyzed with a renewable-plus-storage system model and coupled to a physics-validated Rankine-cycle optimization to size a nuclear-backed steam power block. The portfolio optimization returned an average demand of 3.55 MW, peak demand of 6.50 MW, optimized renewable capacities of 6.77 MW solar and 16.46 MW wind, and an optimized battery energy capacity of 10.50 MWh. To meet reliability targets, the model selected 3.46 MW of dispatchable backup power and achieved 99.47\% reliability against a 95\% target. For the thermal block, the best validated operating point was 6.054 MPa boiler pressure, 620$^{\circ}$C boiler temperature, and 11.18 kPa condenser pressure, with 39.96\% cycle efficiency and all physics checks passing. Translating the 3.46 MW backup requirement to the optimized cycle gives an estimated thermal reactor requirement of 8.65 MW$_{th}$ under model assumptions. The recommended implementation is an inland Eastern Washington reactor site at 46$^{\circ}$43'57.6\textquotedblleft N, 119$^{\circ}$27'48.7\textquotedblright W to reduce coastal hazard exposure while retaining Columbia River cooling access and practical transmission interconnection.
+
+\newpage
+
+\section{Introduction}
+
+\subsection{Project Context and Motivation}
+
+The Port of Seattle is a high-consequence industrial load center with strict reliability needs and aggressive decarbonization pressure. Variable renewable generation can reduce emissions and fuel exposure, but renewable intermittency and finite battery duration leave residual net-load periods that require dispatchable supply. The engineering task is to identify a defensible generation portfolio and convert the required backup capacity into thermodynamically consistent reactor-side requirements.
+
+The audience for this report is the Seattle Port Authority. The recommended decision frame is not only maximizing cycle efficiency; it is selecting a robust system architecture that balances reliability, safety, siting practicality, and long-term power delivery risk.
+
+\subsection{Technical Objectives}
+
+\begin{itemize}[itemsep=0.3em]
+    \item Quantify Seattle renewable and load behavior using the provided optimization toolkit.
+    \item Determine dispatchable backup capacity required to satisfy reliability targets.
+    \item Optimize a constrained Rankine cycle for advanced nuclear-coupled steam conditions.
+    \item Validate optimized cycle points against first-law and physical feasibility checks.
+    \item Convert backup electrical requirement into preliminary reactor thermal capacity.
+    \item Provide a siting and implementation recommendation suitable for a port authority decision memo.
+\end{itemize}
+
+\section{Methodology}
+
+\subsection{Computational Architecture}
+
+The workflow couples two model layers:
+\begin{enumerate}[itemsep=0.3em]
+    \item \textbf{Seattle portfolio optimization} using data-ingestion, renewable-sizing, and storage-dispatch modules to estimate renewable capacities, storage size, and required backup dispatch.
+    \item \textbf{Thermodynamic optimization} using constrained cycle and validation modules to maximize efficiency subject to superheat and turbine-exit quality constraints, then automatically verify first-law closure and physical sign checks.
+\end{enumerate}
+
+This modular structure is important for engineering QA. The portfolio model determines system-level power needs, while the Rankine model translates those needs into cycle-level design implications. Validation is isolated in its own module, which reduces the chance of hidden solver errors propagating directly into design claims.
+
+\subsection{Thermodynamic Analysis Framework}
+
+The Rankine model uses water as working fluid with four state points:
+\begin{enumerate}[itemsep=0.3em]
+    \item State 1-2: Pump compression
+    \item State 2-3: Boiler heat addition
+    \item State 3-4: Turbine expansion
+    \item State 4-1: Condenser heat rejection
+\end{enumerate}
+
+Performance relationships are:
+\begin{align}
+    W_{pump} &= h_2 - h_1 \\
+    W_{turbine} &= h_3 - h_4 \\
+    W_{net} &= W_{turbine} - W_{pump} \\
+    Q_{in} &= h_3 - h_2 \\
+    Q_{out} &= h_4 - h_1 \\
+    \eta_{th} &= \frac{W_{net}}{Q_{in}}
+\end{align}
+
+Constraint definitions:
+\begin{itemize}[itemsep=0.3em]
+    \item Superheat margin: $T_{boiler}-T_{sat}(P_{boiler})-50\,\mathrm{K} \ge 0$
+    \item Turbine exit quality margin: $x_4-0.88 \ge 0$
+\end{itemize}
+
+\subsection{Optimization Setup and Validation}
+
+To make the cycle setup defensible for a high-temperature nuclear steam application, bounds were set to:
+\begin{itemize}[itemsep=0.3em]
+    \item $P_{boiler}$: 6 to 16 MPa
+    \item $T_{boiler}$: 450 to 620$^{\circ}$C
+    \item $P_{condenser}$: 5 to 20 kPa
+\end{itemize}
+
+Two solvers were run:
+\begin{itemize}[itemsep=0.3em]
+    \item SLSQP (local constrained gradient method)
+    \item Differential Evolution (global method) with deterministic initialization for repeatability
+\end{itemize}
+
+Validation outputs were generated automatically in a machine-readable validation report, including energy residual, efficiency consistency, sign checks, and constraint margins.
+
+\section{Results and Discussion}
+
+\subsection{Seattle Portfolio Optimization Results}
+
+\begin{table}[H]
+\centering
+\caption{Seattle portfolio optimization summary}
+\label{tab:portfolio}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} & \textbf{Units} \\
+\midrule
+Optimized solar capacity & 6,769.03 & kW \\
+Optimized wind capacity & 16,456.32 & kW \\
+PV/wind ratio & 0.41 & -- \\
+Average demand & 3.55 & MW \\
+Peak demand & 6.50 & MW \\
+Average renewable output & 2.48 & MW \\
+Optimized BESS energy capacity & 10.50 & MWh \\
+BESS power rating (fixed in model) & 4.00 & MW \\
+Optimized backup (Rankine) power & 3.46 & MW \\
+Achieved reliability & 99.47 & \% \\
+Reliability target & 95.00 & \% \\
+Unserved energy & 163.05 & MWh/yr \\
+BESS annual equivalent cycles & 178 & cycles/yr \\
+Levelized system cost indicator & 173.83 & \$/MWh \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{../power_flow.png}
+    \caption{Seattle power flow simulation with battery dispatch, Rankine backup dispatch, and unserved load trace. The backup plant is frequently used during renewable deficits, motivating a high-availability dispatchable source.}
+    \label{fig:powerflow}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{../reliability.png}
+    \caption{Monthly reliability profile from the Seattle simulation. Reliability remains above the target across all months, indicating that the selected backup capacity and storage configuration are adequate under modeled conditions.}
+    \label{fig:reliability}
+\end{figure}
+
+\subsection{Rankine Optimization and Validation Results}
+
+\begin{table}[H]
+\centering
+\caption{Rankine optimization results under advanced-reactor-style bounds}
+\label{tab:rankineopt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Method} & \textbf{Boiler Pressure (MPa)} & \textbf{Boiler Temp ($^{\circ}$C)} & \textbf{Condenser Pressure (kPa)} \\
+\midrule
+SLSQP & 8.248 & 620.00 & 20.00 \\
+Differential Evolution & 6.054 & 620.00 & 11.18 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Selected cycle performance (Differential Evolution optimum)}
+\label{tab:rankineperf}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} & \textbf{Units} \\
+\midrule
+Thermal efficiency & 39.959 & \% \\
+Pump work & 6.10 & kJ/kg \\
+Turbine work & 1,403.96 & kJ/kg \\
+Net work & 1,397.85 & kJ/kg \\
+Heat input & 3,498.21 & kJ/kg \\
+Heat rejected & 2,100.36 & kJ/kg \\
+Superheat margin & 293.83 & K \\
+Turbine exit quality & 0.8800003 & -- \\
+Energy-balance residual & $-2.33\times10^{-10}$ & J/kg \\
+Validation outcome & PASS (all checks) & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Thermodynamic states for selected cycle (Differential Evolution optimum)}
+\label{tab:states}
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+\textbf{State} & \textbf{P (MPa)} & \textbf{T (K)} & \textbf{h (kJ/kg)} & \textbf{s (J/kg-K)} & \textbf{v (m$^3$/kg)} \\
+\midrule
+1 & 0.011 & 321.15 & 200.99 & 677.87 & 0.000565 \\
+2 & 6.054 & 321.36 & 207.09 & 677.87 & 0.000564 \\
+3 & 6.054 & 893.15 & 3,705.30 & 7,217.95 & 0.000034 \\
+4 & 0.011 & 321.15 & 2,301.34 & 7,217.95 & 0.000010 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{../optimization_contour_boiler.png}
+    \caption{Efficiency contour over boiler pressure and boiler temperature. Within the selected bounds, the optimizer consistently drives toward the high-temperature boundary while balancing quality constraints through pressure and condenser settings.}
+    \label{fig:contour_boiler}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{../optimization_sensitivity.png}
+    \caption{One-dimensional sensitivity trends around the selected optimum. Condenser pressure and boiler temperature strongly affect efficiency in this range, while pressure sensitivity is milder once quality constraints are active.}
+    \label{fig:sensitivity}
+\end{figure}
+
+\subsection{Reactor Thermal Sizing from Backup Requirement}
+
+Using the optimized backup requirement and selected cycle performance:
+\begin{align}
+    P_{backup,e} &= 3.457\;\text{MW} \\
+    w_{net} &= 1,397.85\;\text{kJ/kg} \\
+    \dot{m} &= \frac{P_{backup,e}}{w_{net}} = \frac{3,457\;\text{kJ/s}}{1,397.85\;\text{kJ/kg}} = 2.47\;\text{kg/s} \\
+    Q_{th} &= \dot{m}\,q_{in} = 2.47\times 3,498.21 = 8,651\;\text{kW}_{th} \\
+    Q_{th} &= \frac{P_{backup,e}}{\eta_{th}} = \frac{3.457}{0.3996}=8.65\;\text{MW}_{th}
+\end{align}
+
+The two methods agree. Under model assumptions, approximately 8.65 MW$_{th}$ is required. For preliminary project planning, a practical procurement envelope is 10--12 MW$_{th}$ to absorb design margin, off-design performance, and balance-of-plant losses not explicitly modeled.
+
+\section{Integration with Port Energy System and Siting}
+
+\subsection{Eastern Washington Site Recommendation}
+
+The proposed generation site is anchored at 46$^{\circ}$43'57.6\textquotedblleft N, 119$^{\circ}$27'48.7\textquotedblright W (46.732667, -119.463528), north of the Hanford area and adjacent to the Columbia River corridor. This recommendation is based on four practical filters:
+\begin{itemize}[itemsep=0.3em]
+    \item Lower population density than the Seattle waterfront service area.
+    \item No coastal tsunami exposure and reduced direct marine hazard compared with an on-port siting concept; this screening factor is reinforced by lessons from the Fukushima disaster in Japan.
+    \item Columbia River proximity for cooling-water logistics.
+    \item Existing regional transmission and hydroelectric infrastructure to support grid interconnection and dispatch.
+\end{itemize}
+The site screen also considered proximity to existing hydro assets in the corridor, with the nearest hydroelectric dam approximately 26 miles away.
+
+This is a screening-level recommendation, not a licensed site decision. Final siting must include geotechnical, hydrological, seismic, environmental permitting, tribal consultation, and transmission impact studies.
+
+\subsection{Trade-offs and Engineering Judgment}
+
+The optimized cycle is constrained and validated, but it is still an idealized thermodynamic model. Three trade-offs govern next-phase engineering:
+\begin{enumerate}[itemsep=0.3em]
+    \item \textbf{Efficiency vs. material/plant complexity:} Higher steam temperature improves efficiency but can increase material requirements and operating complexity.
+    \item \textbf{Inland safety posture vs. transmission distance:} Moving generation inland reduces coastal hazard exposure but introduces transmission siting and right-of-way coordination.
+    \item \textbf{Model upper-bound performance vs. deployable performance:} The current cycle does not include all secondary losses. Planning should carry explicit thermal and cost margins.
+\end{enumerate}
+
+\section{Recommendations}
+
+\begin{enumerate}[itemsep=0.4em]
+    \item Advance a pre-feasibility package for an inland Columbia-corridor small nuclear project sized at 10--12 MW$_{th}$ equivalent for the current Seattle backup requirement.
+    \item Keep the optimized backup electrical requirement of 3.46 MW as the near-term design point, with sensitivity testing for higher electrification scenarios.
+    \item Preserve the current validation workflow in all future optimization runs; do not accept solver outputs without first-law and constraint checks.
+    \item Initiate a transmission and interconnection screening focused on Eastern Washington-to-Seattle delivery reliability under outage contingencies.
+    \item In the next design phase, add non-ideal turbine/pump/generator efficiencies and component-level economic models for final technology selection.
+\end{enumerate}
+
+\section{AI-Assisted Engineering: Process and Reflection}
+
+AI tools were used for structured code drafting, debugging, and report synthesis; however, all final technical claims were tied back to executed model outputs and explicit physics checks. The most valuable use was rapid iteration: converting optimization requirements into testable code, then validating outputs against thermodynamic constraints and energy-balance residuals. The least reliable use was one-shot technical text generation without dataset grounding. The final workflow that proved reliable was: generate candidate code, run constrained optimization, verify with automated validation, then write conclusions from measured outputs. This process reinforced that AI is a productivity amplifier for engineering workflows, not a replacement for model verification or design judgment.
+
+\section{Conclusions and Recommendations}
+
+The Seattle electrification analysis indicates that renewable and storage resources materially reduce net load but still require dispatchable backup for high reliability. The optimized system selected 3.46 MW backup capacity and achieved 99.47\% modeled reliability. A constrained and validated Rankine cycle optimized for advanced nuclear-style steam conditions delivered 39.96\% thermal efficiency, with all validation checks passing. Translating the electrical backup requirement to reactor thermal duty yields approximately 8.65 MW$_{th}$ under model assumptions; a practical planning range is 10--12 MW$_{th}$. The recommended path is an inland Eastern Washington siting strategy near the provided coordinate, coupled with a formal next-phase siting and interconnection study package before procurement decisions.
+
+\section*{References}
+\addcontentsline{toc}{section}{References}
+\begin{thebibliography}{99}
+
+\bibitem{ninja}
+Renewables.ninja, ``Renewable energy simulation data platform,'' \url{https://www.renewables.ninja/}, accessed Feb. 2026.
+
+\bibitem{pnnl}
+Pacific Northwest National Laboratory, \textit{Port Electrification Handbook}, U.S. DOE support documentation, accessed Feb. 2026.
+
+\bibitem{mit}
+A. C. Kadak, ``Power Cycles for Nuclear Plants: Rankine and Brayton,'' Massachusetts Institute of Technology OpenCourseWare, 2008. \url{https://ocw.mit.edu/courses/22-091-nuclear-reactor-safety-spring-2008/7183694b3c0e1c088b34a0af4f278c61_MIT22_091S08_lec08.pdf}
+
+\bibitem{nuclearcycle}
+Nuclear-Power.com, ``Boiler and condenser pressures -- Rankine cycle,'' 2021. \url{https://www.nuclear-power.com/nuclear-engineering/thermodynamics/thermodynamic-cycles/rankine-cycle-steam-turbine-cycle/boiler-and-condenser-pressures-rankine-cycle/}
+
+\bibitem{ans}
+S. Gallier, J. Fabian, and S. M. B. Campbell, ``U.S. nuclear capacity factors: stability and energy dominance,'' American Nuclear Society, 2024. \url{https://www.ans.org/news/article-6967/us-nuclear-capacity-factors-stability-and-energy-dominance/}
+
+\bibitem{usgs}
+U.S. Geological Survey, ``National seismic hazard maps and data,'' \url{https://www.usgs.gov/programs/earthquake-hazards/hazards}, accessed Feb. 2026.
+
+\end{thebibliography}
+
+\end{document}

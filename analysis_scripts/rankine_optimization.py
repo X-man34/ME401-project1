@@ -192,9 +192,9 @@ def optimize_rankine_cycle():
     # What if you allow lower condenser pressures (better vacuum)?
     
     bounds = [
-        (2e6, 12e6),      # P_boiler: 1-6 MPa
-        (200+273.15, 830+273.15),  # T_boiler: 
-        (1e3, 20e3)       # P_condenser: 5-50 kPa
+        (6e6, 16e6),      # P_boiler: 6-16 MPa
+        (450+273.15, 620+273.15),  # T_boiler: 450-620 degC
+        (5e3, 20e3)       # P_condenser: 5-20 kPa
     ]
     
     print("\nOptimization Bounds:")
@@ -224,9 +224,9 @@ def optimize_rankine_cycle():
     # Start somewhere in the middle of the feasible region.
     
     x0 = np.array([
-        6e6,      # P_boiler = 10 MPa (middle of range)
-        400+273.15,  # T_boiler = 500°C (middle of range)
-        10e3       # P_condenser = 10 kPa (middle of range)
+        9e6,      # P_boiler = 9 MPa
+        560+273.15,  # T_boiler = 560 degC
+        12e3       # P_condenser = 12 kPa
     ])
     
     print(f"\nInitial Guess:")
@@ -280,6 +280,7 @@ def optimize_rankine_cycle():
         objective_function,
         bounds,
         constraints=de_constraints,
+        rng=42,  # Fixed RNG for reproducible report values
         disp=True,
         maxiter=50,  # Adjust based on time available
         workers=1    # Use 1 worker to avoid CoolProp threading issues
@@ -593,3 +594,4 @@ if __name__ == "__main__":
 # =============================================================================
 # ADVANCED EXERCISES FOR FURTHER LEARNING
 # =============================================================================
+
